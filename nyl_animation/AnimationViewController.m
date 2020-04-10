@@ -312,11 +312,7 @@
         [NSValue valueWithCGPoint:CGPointMake(10, 600)],
     ];
     animation.duration = 6;
-//    [greenView.layer addAnimation:animation forKey:nil];
-    
-    [UIView animateWithDuration:2 animations:^{
-        greenView.layer.transform = CATransform3DMakeScale(0, 400, 400);
-    }];
+    [greenView.layer addAnimation:animation forKey:nil];
 }
 
 
