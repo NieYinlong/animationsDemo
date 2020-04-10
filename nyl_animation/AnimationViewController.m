@@ -28,33 +28,45 @@
     self.view.backgroundColor = [UIColor whiteColor];
     
     switch (self.index) {
-        case 0: {
+        case 0:
             [self gradient];
-        }  break;
-        
-        case 1: {
+            break;
+            
+        case 1:
             [self circleProgressView];
-        }  break;
+            break;
             
-        case 2: {
+        case 2:
             [self sectorProgress]; // 扇形
-        }  break;
+            break;
             
-        case 3: {
+        case 3:
             [self animationDrawRectPath]; // 矩形线条闭合动画
-        }  break;
-            
-        case 4: {
+            break;
+
+        case 4:
             [self drawSecondBezierPath]; // 二次贝塞尔曲线
-        }  break;
+            break;
             
-        case 5: {
-           
-        }  break;
+        case 5:
+            [self demo_CABasicAnimation_bounds];
+            break;
             
-        case 6: {
-           
-        }  break;
+            case 6:
+            [self demo_CABasicAnimation_position];
+            
+            break;
+        case 7:
+            [self demo_CABasicAnimation_transform];
+            break;
+            
+        case 8:
+            [self demo_CAKeyframeAnimation_bgColor];
+            break;
+            
+            case 9:
+            [self demo_CAKeyframeAnimation_position];
+            break;
             
         default:
             break;
@@ -136,7 +148,7 @@
     CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
     animation.fromValue = @0;
     animation.toValue = @1;
-    animation.duration = 3;
+    animation.duration = 1.4;
     [proShapeLayer addAnimation:animation forKey:nil];
     
 }
@@ -165,7 +177,7 @@
 
 - (void)actionSectorTimer {
     _progress +=1;
-     UIBezierPath *bezPath = [UIBezierPath bezierPathWithArcCenter:CGPointMake(300/2, 300/2) radius:150 startAngle:kDegreesToRadians(270) endAngle:kDegreesToRadians(270) + kDegreesToRadians(_progress) clockwise:YES];
+    UIBezierPath *bezPath = [UIBezierPath bezierPathWithArcCenter:CGPointMake(300/2, 300/2) radius:150 startAngle:kDegreesToRadians(270) endAngle:kDegreesToRadians(270) + kDegreesToRadians(_progress) clockwise:YES];
     [bezPath addLineToPoint:CGPointMake(300/2, 300/2)];// 扇形关键代码
     _shapeLayer.path = bezPath.CGPath;
     if (_progress >= 360) {
@@ -178,24 +190,20 @@
 #pragma mark - 矩形线条闭合动画
 - (void)animationDrawRectPath {
     
-    
-
     UIBezierPath *bezPath = [UIBezierPath bezierPathWithRect:CGRectMake(0, 64, kScreenWidth, kScreenHeight - 64)];
-
+    
     CAShapeLayer *layer = [CAShapeLayer layer];
     layer.lineWidth = 30;
     layer.path = bezPath.CGPath;
     layer.strokeColor = [UIColor greenColor].CGColor;
     layer.fillColor = [UIColor clearColor].CGColor;
     [self.view.layer addSublayer:layer];
-
+    
     CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
     animation.duration = 4;
     animation.fromValue = @0;
     animation.toValue = @1;
     [layer addAnimation:animation forKey:nil];
-    
-
 }
 
 
@@ -222,7 +230,7 @@
     layer.lineWidth  = 10;
     
     [self.view.layer addSublayer:layer];
-   
+    
     // 为曲线添加轨迹动画
     CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
     animation.fromValue = @0;
@@ -231,6 +239,85 @@
     [layer addAnimation:animation forKey:nil];
 }
 
+- (void)demo_CABasicAnimation_bounds {
+    
+    UIView *redView = [[UIView alloc] initWithFrame:CGRectMake(0, 100, 100, 100)];
+    redView.backgroundColor = [UIColor redColor];
+    [self.view addSubview:redView];
+    
+    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"bounds.size"];
+    animation.fromValue = [NSValue valueWithCGSize:CGSizeMake(0, 0)];
+    animation.toValue = [NSValue valueWithCGSize:CGSizeMake(100, 100)];
+    animation.duration = 2;
+    [redView.layer addAnimation:animation forKey:nil];
+}
+
+- (void)demo_CABasicAnimation_position {
+    UIView *greenView = [[UIView alloc] initWithFrame:CGRectMake(0, 100, 100, 100)];
+    greenView.backgroundColor = [UIColor greenColor];
+    [self.view addSubview:greenView];
+    
+    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"position"];
+    animation.fromValue = [NSValue valueWithCGPoint:CGPointMake(0, 100)];
+    animation.toValue = [NSValue valueWithCGPoint:CGPointMake(200, 400)];
+    animation.duration = 2;
+    [greenView.layer addAnimation:animation forKey:nil];
+}
+
+
+- (void)demo_CABasicAnimation_transform {
+    UIView *greenView = [[UIView alloc] initWithFrame:CGRectMake(0, 100, 100, 100)];
+    greenView.backgroundColor = [UIColor greenColor];
+    [self.view addSubview:greenView];
+    
+    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.y"];
+    animation.toValue = [NSNumber numberWithFloat:M_PI];
+    animation.duration = 2;
+    [greenView.layer addAnimation:animation forKey:nil];
+}
+
+#pragma mark - CAKeyFrameAnimation
+- (void)demo_CAKeyframeAnimation_bgColor {
+    UIView *greenView = [[UIView alloc] initWithFrame:CGRectMake(0, 100, 100, 100)];
+    greenView.backgroundColor = [UIColor greenColor];
+    [self.view addSubview:greenView];
+    
+    CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"backgroundColor"];
+    animation.values = @[
+        (id)[UIColor redColor].CGColor,
+        (id)[UIColor orangeColor].CGColor,
+        (id)[UIColor yellowColor].CGColor,
+        (id)[UIColor greenColor].CGColor,
+        (id)[UIColor blueColor].CGColor,
+        (id)[UIColor purpleColor].CGColor,
+    ];
+    animation.duration = 6;
+    [greenView.layer addAnimation:animation forKey:nil];
+}
+
+- (void)demo_CAKeyframeAnimation_position {
+    UIView *greenView = [[UIView alloc] initWithFrame:CGRectMake(0, 100, 100, 100)];
+    greenView.backgroundColor = [UIColor greenColor];
+    [self.view addSubview:greenView];
+    
+    CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"position"];
+    animation.values = @[
+        [NSValue valueWithCGPoint:CGPointMake(10, 100)],
+        [NSValue valueWithCGPoint:CGPointMake(20, 120)],
+        [NSValue valueWithCGPoint:CGPointMake(60, 230)],
+        [NSValue valueWithCGPoint:CGPointMake(100, 440)],
+        [NSValue valueWithCGPoint:CGPointMake(150, 350)],
+        [NSValue valueWithCGPoint:CGPointMake(200, 260)],
+        [NSValue valueWithCGPoint:CGPointMake(90, 100)],
+        [NSValue valueWithCGPoint:CGPointMake(10, 600)],
+    ];
+    animation.duration = 6;
+//    [greenView.layer addAnimation:animation forKey:nil];
+    
+    [UIView animateWithDuration:2 animations:^{
+        greenView.layer.transform = CATransform3DMakeScale(0, 400, 400);
+    }];
+}
 
 
 - (void)didReceiveMemoryWarning {
@@ -239,13 +326,13 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

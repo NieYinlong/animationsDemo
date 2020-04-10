@@ -28,7 +28,19 @@
 }
 
 - (NSArray *)methodsArray {
-    return @[@"渐变.",  @"圆环进度(带渐变的)" , @"扇形", @"矩形线条闭合动画", @"画二次贝塞尔曲线"];
+    return @[@"渐变.",
+             @"圆环进度(带渐变的)",
+             @"扇形",
+             @"矩形线条闭合动画",
+             @"画二次贝塞尔曲线",
+             @"CABasicAnimation改变bounds",
+             @"CABasicAnimation改变position",
+             @"CABasicAnimation改变transform",
+             @"CAKeyFrameAnimation改变颜色",
+             @"CAKeyFrameAnimation改变position",
+             @"",
+             @"",
+             @""];
 }
 
 - (UITableView *)tableView {
